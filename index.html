@@ -1,0 +1,864 @@
+<!doctype html>
+<html lang="en-AU"><head>
+<meta charset="utf-8">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'unsafe-inline'; style-src 'unsafe-inline'; img-src data: blob:; font-src data:; media-src data: blob:; connect-src 'none'; form-action 'none'; base-uri 'none'">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="airt-id" content="tolkien-whos-who-chart">
+<meta name="airt-version" content="1.0">
+<title>Tolkien who's-who chart</title>
+<style>
+@page{size:297mm 210mm;margin:0}
+*{box-sizing:border-box}
+html,body{margin:0;padding:0;background:#ddd}
+body{font-family:"Alegreya",serif;color:#2a2418;font-size:7.4pt;line-height:1.22;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+.page{position:relative;width:297mm;height:210mm;overflow:hidden;background:#f7f0de;padding:8mm 10mm 0 10mm;page-break-after:always;break-after:page;margin:0 auto}
+.page:last-child{page-break-after:auto;break-after:auto}
+.page::before{content:"";position:absolute;inset:4mm;border:0.5mm solid #8a6a2a;pointer-events:none}
+.page::after{content:"";position:absolute;inset:5.2mm;border:0.2mm solid #b8995a;pointer-events:none}
+.kick{font-family:"Cinzel",serif;font-size:6.8pt;letter-spacing:.32em;color:#8a6a2a;font-weight:700;text-transform:uppercase}
+h1{font-family:"Cinzel",serif;font-weight:700;font-size:20pt;letter-spacing:.04em;margin:.5mm 0 .6mm;color:#1d2a4a;line-height:1.05}
+.lede{font-style:italic;font-size:8.4pt;color:#4a3f2c;max-width:255mm;margin:0 0 2.5mm}
+.foot{position:absolute;left:10mm;right:10mm;bottom:6.5mm;display:flex;justify-content:space-between;align-items:center;font-size:6.2pt;color:#5b4d33;border-top:0.2mm solid #b8995a;padding-top:1mm}
+.foot .pg{font-family:"Cinzel",serif;letter-spacing:.2em;font-weight:700;color:#8a6a2a}
+.key{display:flex;gap:4mm;align-items:center}
+.key span{display:flex;align-items:center;gap:1.2mm}
+.key i{display:inline-block;width:5mm;height:2.6mm;border-radius:.6mm;border:.35mm solid}
+/* boxes */
+.b{position:relative;background:#fffaf0;border:.3mm solid #b9a77f;border-top:1.2mm solid #888;border-radius:1.2mm;padding:1.1mm 1.6mm 1.2mm;box-shadow:0 .4mm .8mm rgba(60,40,10,.12);z-index:3}
+.b h4{font-family:"Cinzel",serif;font-size:8.2pt;font-weight:700;margin:0;line-height:1.1;letter-spacing:.02em}
+.b .s{font-style:italic;font-size:6.6pt;color:#6b5c40;margin:.2mm 0 .5mm;line-height:1.15}
+.b p{margin:.3mm 0 0}
+.b ul{margin:.4mm 0 0;padding-left:3mm}.b li{margin:.2mm 0}
+.b.big h4{font-size:10pt}
+.b.sm h4{font-size:7.4pt}.b.sm{padding:.8mm 1.3mm 1mm}
+sup{color:#a87b12;font-weight:700;font-size:5.6pt;line-height:0;margin-left:.3mm}
+.ainur{border-top-color:#b8860b;background:#fff6dc}.ainur h4{color:#7a5608}
+.child{border-top-color:#2b4c7e;background:#eef3fb}.child h4{color:#1f3c68}
+.made{border-top-color:#2f6b4f;background:#eaf5ee}.made h4{color:#22553c}
+.mixed{border-top-color:#6b4c9a;background:#f2ecfa}.mixed h4{color:#563a82}
+.dark{border-top-color:#9b2d30;background:#fbeceb}.dark h4{color:#86232a}
+.unk{border:.35mm dashed #7d7466;border-top:1.2mm dashed #7d7466;background:#f1eee8}.unk h4{color:#4f4a40}
+.eru{background:#1d2a4a;border:.5mm solid #c9a23c;border-top:.5mm solid #c9a23c;color:#f6efdd;text-align:center}
+.eru h4{color:#f3d27a;font-size:11pt;letter-spacing:.12em}.eru .s{color:#e7d9b4}
+.side{border-top-color:#c9a23c;background:#fffbea}.side h4{color:#7a5608}
+.panel{position:relative;border-radius:2mm;padding:1.6mm;z-index:1}
+.panel.pchild{background:rgba(43,76,126,.07);border:.3mm solid rgba(43,76,126,.25)}
+.panel.painur{background:rgba(184,134,11,.08);border:.3mm solid rgba(184,134,11,.3)}
+.panel.pdark{background:rgba(155,45,48,.07);border:.3mm solid rgba(155,45,48,.25)}
+.row{display:flex;gap:2.4mm;align-items:flex-start}
+.col{display:flex;flex-direction:column;gap:2mm}
+.who{margin-top:1mm;background:#fffdf7;border:.25mm solid #cdbf9f;border-radius:1mm;padding:.9mm 1.3mm;font-size:6.7pt;z-index:3;position:relative}
+.who b.t{display:block;font-family:"Cinzel",serif;font-size:5.8pt;letter-spacing:.25em;color:#8a6a2a;margin-bottom:.3mm}
+.who p{margin:.25mm 0}
+.lbl{font-family:"Alegreya",serif;font-style:italic;font-size:6pt;fill:#6b5c40;paint-order:stroke;stroke:#f7f0de;stroke-width:2.2px}
+svg.labels{position:absolute;left:0;top:0;width:100%;height:100%;z-index:4;pointer-events:none;overflow:visible}
+svg.wires{position:absolute;left:0;top:0;width:100%;height:100%;z-index:2;pointer-events:none;overflow:visible}
+.band{font-style:italic;font-size:6.6pt;color:#5b4d33;text-align:center;border-top:.25mm solid #b8995a;padding-top:.6mm}
+.banner{background:#1d2a4a;color:#f6efdd;border:.5mm solid #c9a23c;border-radius:1.5mm;padding:1.6mm 3mm;text-align:center;z-index:3;position:relative}
+.banner h4{font-family:"Cinzel",serif;color:#f3d27a;font-size:9.5pt;margin:0 0 .4mm;letter-spacing:.14em}
+/* notes pages */
+.notes{column-count:3;column-gap:6mm;column-fill:auto;height:162mm;font-size:7.7pt;line-height:1.27}
+.note{break-inside:avoid-column;margin:0 0 2.2mm}
+.note h3{font-family:"Cinzel",serif;font-size:8.6pt;color:#1d2a4a;margin:0 0 .6mm;display:flex;gap:1.5mm;align-items:center}
+.note h3 .n{display:inline-flex;width:4.2mm;height:4.2mm;border-radius:50%;background:#1d2a4a;color:#f3d27a;font-size:6.4pt;align-items:center;justify-content:center;flex:none}
+.note p{margin:0 0 1mm;text-align:left}
+table.t{border-collapse:collapse;width:100%;font-size:6.9pt;line-height:1.18}
+table.t th{font-family:"Cinzel",serif;text-align:left;font-size:6.4pt;color:#8a6a2a;border-bottom:.3mm solid #b8995a;padding:.4mm .8mm}
+table.t td{border-bottom:.15mm solid #ddd0b3;padding:.35mm .8mm;vertical-align:top}
+table.t td:first-child{font-weight:700;white-space:nowrap}
+@media screen{.page{margin:6mm auto;box-shadow:0 2mm 6mm rgba(0,0,0,.25)}}
+</style>
+</head>
+<body>
+<!-- ============ PLATE I ============ -->
+<section class="page" data-plate="Plate I · The whole family">
+<div class="kick">Plate I · The whole family</div>
+<h1>The Order of Arda</h1>
+<p class="lede">A who's who of Tolkien's world on one page: from Eru, the One, down through the Holy Ones to Elves, Men, Dwarves, Ents and the servants of the Dark. Box colours show how each kind came to be. Gold numbers send you to the matching Notes on pages 8 to 10.</p>
+
+<div class="row" style="justify-content:center;margin-bottom:5mm">
+ <div class="b eru big" id="p1eru" style="width:92mm"><h4>Eru Ilúvatar</h4><div class="s">the One · All-Father</div><p>Stands outside the World he imagined. Every living thing traces back to him, and he alone can give a creature a true life of its own.<sup>1</sup></p></div>
+</div>
+
+<div class="row" style="gap:3mm">
+ <!-- Children -->
+ <div class="panel pchild" style="width:90mm">
+  <div class="b child" id="p1kids"><h4>The Children of Ilúvatar</h4><div class="s">Elves and Men</div><p>Eru's own idea, added to the Music without the Ainur's help. They woke in Middle-earth at the time he chose.<sup>6, 7</sup></p></div>
+  <div class="row" style="margin-top:4mm">
+   <div class="col" style="width:41mm">
+    <div class="b child sm" id="p1elves"><h4>Elves</h4><div class="s">Quendi · the Firstborn</div><p>Woke by the lake of Cuiviénen under starlight. They live as long as the World does; if slain, they go to the Halls of Mandos.</p></div>
+    <div class="b child sm" id="p1eldar" style="margin-left:4mm"><h4>Eldar and Avari</h4><div class="s">see Plate III</div><p>Those who took up the Valar's call to go West, and those who stayed behind. The travellers split into Vanyar, Noldor and Teleri.</p></div>
+    <div class="b mixed sm" id="p1half" style="margin-left:4mm"><h4>The Half-elven</h4><div class="s">Elrond, Elros, Arwen</div><p>Born of marriages between Elves and Men, and given a choice of which kin to belong to. See Plate V.<sup>13</sup></p></div>
+   </div>
+   <div class="col" style="width:41mm">
+    <div class="b child sm" id="p1men"><h4>Men</h4><div class="s">Atani · the Secondborn</div><p>Woke at the first sunrise, far in the East. Mortal: when they die they leave the World altogether, which the Elves called the Gift of Men.</p></div>
+    <div class="b child sm" id="p1numen" style="margin-left:4mm"><h4>Númenóreans</h4><div class="s">the Dúnedain</div><p>Elf-friends given an island kingdom. When it sank, survivors founded Arnor and Gondor; Aragorn is their heir.<sup>12</sup></p></div>
+    <div class="b child sm" id="p1hob" style="margin-left:4mm"><h4>Hobbits</h4><div class="s">Halflings</div><p>A small, quiet branch of Men, later settled in the Shire.<sup>15</sup></p></div>
+    <div class="b child sm" id="p1other" style="margin-left:4mm"><h4>Other peoples</h4><div class="s">see Plate IV</div><p>Rohirrim, Bardings, Beornings, Easterlings, Haradrim, Dunlendings and the Woses.</p></div>
+   </div>
+  </div>
+ </div>
+ <!-- Ainur -->
+ <div class="panel painur" style="width:94mm">
+  <div class="b ainur" id="p1ainur"><h4>The Ainur</h4><div class="s">the Holy Ones</div><p>Spirits Eru thought into being before time began. Their Great Music became the pattern of the World, Eä. Some chose to go down into it.<sup>1</sup></p></div>
+  <div class="row" style="margin-top:4mm">
+   <div class="col" style="width:43mm">
+    <div class="b ainur sm" id="p1maiar"><h4>Maiar</h4><div class="s">lesser Ainur</div><p>The helpers and servants of the Valar. Many of them, and few named.<sup>4</sup></p></div>
+    <div class="b ainur sm" id="p1istari" style="margin-left:4mm"><h4>Istari</h4><div class="s">the Wizards</div><p>Five Maiar sent in old-man form about the year 1000 of the Third Age: Gandalf, Saruman, Radagast and the two Blue Wizards.<sup>4</sup></p></div>
+    <div class="b ainur sm" id="p1melian" style="margin-left:4mm"><h4>Melian</h4><div class="s">Queen of Doriath</div><p>Married the Elf-king Thingol; mother of Lúthien.</p></div>
+    <div class="b ainur sm" id="p1arien" style="margin-left:4mm"><h4>Arien and Tilion</h4><div class="s">guides of Sun and Moon</div><p>Each steers one of the two lights across the sky.<sup>5</sup></p></div>
+   </div>
+   <div class="col" style="width:43mm">
+    <div class="b ainur sm" id="p1valar"><h4>Valar</h4><div class="s">the Powers · 7 lords, 7 queens</div><p>The mightiest Ainur in the World, who shaped it and guard it from Valinor in the far West. Manwë is their king.<sup>2</sup></p></div>
+    <div class="b made sm" id="p1dwarf" style="margin-left:4mm"><h4>Dwarves</h4><div class="s">made by Aulë</div><p>Shaped in secret by the Smith. Eru forgave him and gave them life.<sup>8</sup></p></div>
+    <div class="b made sm" id="p1ents" style="margin-left:4mm"><h4>Ents</h4><div class="s">at Yavanna's asking</div><p>Spirits who came to dwell in trees as guardians of the woods.<sup>9</sup></p></div>
+    <div class="b made sm" id="p1eagles" style="margin-left:4mm"><h4>Great Eagles</h4><div class="s">Manwë's watchers</div><p>Wise, speaking birds who carry news and rescue.<sup>9</sup></p></div>
+   </div>
+  </div>
+ </div>
+ <!-- Dark -->
+ <div class="panel pdark" style="width:85mm">
+  <div class="b dark" id="p1melkor"><h4>Melkor · Morgoth</h4><div class="s">the great rebel · first Dark Lord</div><p>Once the greatest of the Ainur. He broke the Music with his own themes and spoiled the World. He can twist life but never make it.<sup>3, 10</sup></p></div>
+  <div class="row" style="margin-top:4mm">
+   <div class="col" style="width:39mm">
+    <div class="b dark sm" id="p1fallen"><h4>Fallen spirits</h4><div class="s">Maiar he won over</div></div>
+    <div class="b dark sm" id="p1sauron" style="margin-left:4mm"><h4>Sauron</h4><div class="s">fallen Maia</div><p>Began among Aulë's people; became Morgoth's chief servant, then a Dark Lord himself.<sup>4</sup></p></div>
+    <div class="b dark sm" id="p1nazgul" style="margin-left:8mm"><h4>Nazgûl</h4><div class="s">Ringwraiths</div><p>Nine mortal kings held fast by his Nine Rings.<sup>14</sup></p></div>
+    <div class="b dark sm" id="p1balrog" style="margin-left:4mm"><h4>Balrogs</h4><div class="s">fallen Maiar</div><p>Fire-spirits who joined Melkor early.</p></div>
+   </div>
+   <div class="col" style="width:39mm">
+    <div class="b dark sm" id="p1bred"><h4>Bred or twisted</h4><div class="s">creatures of the Dark</div></div>
+    <div class="b dark sm" id="p1orcs" style="margin-left:4mm"><h4>Orcs</h4><p>Most tales say bred from captured Elves.<sup>10</sup></p></div>
+    <div class="b dark sm" id="p1trolls" style="margin-left:4mm"><h4>Trolls</h4><p>Huge and slow; daylight turns many to stone.<sup>10</sup></p></div>
+    <div class="b dark sm" id="p1drag" style="margin-left:4mm"><h4>Dragons</h4><p>Glaurung, Ancalagon, Smaug.<sup>10</sup></p></div>
+    <div class="b dark sm" id="p1wolf" style="margin-left:4mm"><h4>Werewolves</h4><p>Evil spirits in wolf shape.</p></div>
+   </div>
+  </div>
+  <div class="b unk sm" id="p1ung" style="margin-top:3mm"><h4>Ungoliant → Shelob</h4><div class="s">origin unknown</div><p>A spider-shaped being of darkness who helped Melkor kill the Two Trees. Shelob was the last of her brood.<sup>16</sup></p></div>
+ </div>
+</div>
+<div class="row" style="margin-top:3mm;gap:3mm">
+ <div class="b side sm" style="width:90mm"><h4>Two awakenings</h4><p>The Elves woke first, in a world lit only by stars. Men woke much later, on the morning the Sun first rose. That is why Elves are called the Firstborn and Men the Secondborn.<sup>6, 7</sup></p></div>
+ <div class="b side sm" style="width:94mm"><h4>How to read the lines</h4><p>A line downwards means "came from" or "belongs to". A dashed red line means rebellion. Double gold lines on Plates II and V join husbands and wives. A box's colour tells you how that kind of being came into the World (see the key below).</p></div>
+ <div class="b side sm" style="width:85mm"><h4>The rule behind it all</h4><p>Real life is Eru's alone to give. Melkor and Sauron could breed, enslave or twist living things, but never make anything new.<sup>10</sup></p></div>
+</div>
+<script type="text/links">
+p1eru p1kids v #2b4c7e Eru's own theme
+p1eru p1ainur v #b8860b his first thought
+p1ainur p1melkor h #9b2d30 rebelled dash
+p1kids p1elves v #2b4c7e
+p1kids p1men v #2b4c7e
+p1elves p1eldar t #2b4c7e
+p1elves p1half t #6b4c9a
+p1men p1numen t #2b4c7e
+p1men p1hob t #2b4c7e
+p1men p1other t #2b4c7e
+p1ainur p1maiar v #b8860b
+p1ainur p1valar v #b8860b
+p1maiar p1istari t #b8860b
+p1maiar p1melian t #b8860b
+p1maiar p1arien t #b8860b
+p1valar p1dwarf t #2f6b4f
+p1valar p1ents t #2f6b4f
+p1valar p1eagles t #2f6b4f
+p1melkor p1fallen v #9b2d30
+p1melkor p1bred v #9b2d30
+p1fallen p1sauron t #9b2d30
+p1fallen p1balrog t #9b2d30
+p1sauron p1nazgul t #9b2d30
+p1bred p1orcs t #9b2d30
+p1bred p1trolls t #9b2d30
+p1bred p1drag t #9b2d30
+p1bred p1wolf t #9b2d30
+</script>
+</section>
+<!-- ============ PLATE II ============ -->
+<section class="page">
+<div class="kick">Plate II · The Powers</div>
+<h1>The Powers: Valar and Maiar</h1>
+<p class="lede">Fourteen Valar, grouped by household, with some of the Maiar who served each one. A ★ marks the Aratar, the eight greatest. Double gold lines join husband and wife; a tree line runs from a Vala to the Maiar of their household.</p>
+<div class="row" style="justify-content:center;gap:10mm;margin-bottom:5mm;position:relative">
+ <div class="b eru sm" id="p2eru" style="width:52mm;position:absolute;left:0;top:0"><h4>Eru Ilúvatar</h4><p>The Ainur began as his thoughts.</p></div>
+ <div class="b ainur" id="p2ainur" style="width:78mm"><h4>The Ainur</h4><p>Those who entered the World at its start: the great Valar, and the lesser Maiar who help them.<sup>1, 2</sup></p></div>
+</div>
+<div class="row" style="gap:2mm">
+ <div class="col" style="width:29mm">
+  <div class="b ainur sm" id="v1"><h4>Manwë ★</h4><div class="s">Súlimo · Lord of the Breath of Arda</div><p>King of the Valar and lord of winds and air. Closest of all to Eru's mind. Melkor's brother in Eru's thought.</p></div>
+  <div class="b ainur sm" id="v1s" style="margin-top:2.5mm"><h4>Varda ★</h4><div class="s">Elbereth · Star-kindler</div><p>Queen of the Valar. She set the stars, and the Elves call on her name most of all.</p></div>
+  <div class="b ainur sm" id="v1a" style="margin-left:3mm"><h4>Eönwë</h4><p>Manwë's herald and banner-bearer.</p></div>
+  <div class="b ainur sm" id="v1b" style="margin-left:3mm"><h4>Ilmarë</h4><p>Varda's handmaid.</p></div>
+  <div class="b made sm" id="v1c" style="margin-left:3mm"><h4>Great Eagles</h4><p>Manwë's messengers. See Plate VI.</p></div>
+ </div>
+ <div class="col" style="width:29mm">
+  <div class="b ainur sm" id="v2"><h4>Ulmo ★</h4><div class="s">Lord of Waters</div><p>King of the Sea. He lives in the deep, not in Valinor, and speaks through streams and rivers. Unmarried.</p></div>
+  <div class="b ainur sm" id="v2a" style="margin-left:3mm"><h4>Ossë</h4><p>Master of the coastal seas and their waves; wild at heart.</p></div>
+  <div class="b ainur sm" id="v2b" style="margin-left:3mm"><h4>Uinen</h4><p>Lady of the Seas, Ossë's wife, who calms his storms.</p></div>
+  <div class="b ainur sm" id="v2c" style="margin-left:3mm"><h4>Salmar</h4><p>Maker of Ulmo's great conch horns.</p></div>
+ </div>
+ <div class="col" style="width:29mm">
+  <div class="b ainur sm" id="v3"><h4>Aulë ★</h4><div class="s">the Smith</div><p>Lord of stone, metal and every craft. He made the Dwarves.<sup>8</sup></p></div>
+  <div class="b ainur sm" id="v3s" style="margin-top:2.5mm"><h4>Yavanna ★</h4><div class="s">Kementári · Giver of Fruits</div><p>Queen of the Earth, who loves every growing thing. She sang the Two Trees.<sup>5, 9</sup></p></div>
+  <div class="b ainur sm" id="v3a" style="margin-left:3mm"><h4>Curumo</h4><div class="s">Saruman</div><p>Of Aulë's people; chief of the Wizards.</p></div>
+  <div class="b dark sm" id="v3b" style="margin-left:3mm"><h4>Mairon</h4><div class="s">Sauron</div><p>Also of Aulë's people, until Melkor won him.</p></div>
+  <div class="b ainur sm" id="v3c" style="margin-left:3mm"><h4>Aiwendil</h4><div class="s">Radagast</div><p>Went as a Wizard at Yavanna's wish.</p></div>
+ </div>
+ <div class="col" style="width:29mm">
+  <div class="b ainur sm" id="v4"><h4>Mandos ★</h4><div class="s">Námo · Judge of the Dead</div><p>Holds the Houses of the Dead. Knows what is to come, but speaks only when Manwë asks.</p></div>
+  <div class="b ainur sm" id="v4s" style="margin-top:2.5mm"><h4>Vairë</h4><div class="s">the Weaver</div><p>Weaves the story of the World into the tapestries that line his halls.</p></div>
+  <div class="b side sm" id="v4n"><h4>Halls of Mandos</h4><p>Where the spirits of slain Elves wait, and where Men stop briefly before leaving the World.<sup>7</sup></p></div>
+ </div>
+ <div class="col" style="width:29mm">
+  <div class="b ainur sm" id="v5"><h4>Lórien</h4><div class="s">Irmo · Master of Dreams</div><p>Lord of visions and rest, with the fairest gardens in the World.</p></div>
+  <div class="b ainur sm" id="v5s" style="margin-top:2.5mm"><h4>Estë</h4><div class="s">the Gentle</div><p>Healer of hurts and tiredness. She rests by day on an isle in Lórien's lake.</p></div>
+  <div class="b ainur sm" id="v5a" style="margin-left:3mm"><h4>Olórin</h4><div class="s">Gandalf</div><p>Lived in Lórien's gardens and often visited Nienna.<sup>4</sup></p></div>
+  <div class="b ainur sm" id="v5b" style="margin-left:3mm"><h4>Melian</h4><p>Served Vána and Estë in Lórien, then wed Thingol.</p></div>
+ </div>
+ <div class="col" style="width:29mm">
+  <div class="b ainur sm" id="v6"><h4>Nienna ★</h4><div class="s">Lady of Mercy</div><p>She grieves for every hurt done in the World, and her tears bring healing and hope. Unmarried.</p></div>
+  <div class="b side sm" id="v6n"><h4>The Fëanturi</h4><p>Mandos and Lórien are brothers, known together as the Fëanturi. Their sister is Nienna.</p></div>
+  <div class="b side sm" id="v6m"><h4>A wise teacher</h4><p>Gandalf's pity and patience were said to come from time spent with Nienna.</p></div>
+ </div>
+ <div class="col" style="width:29mm">
+  <div class="b ainur sm" id="v7"><h4>Oromë ★</h4><div class="s">the Huntsman</div><p>Rider and hunter of Middle-earth's forests. He found the Elves.<sup>6</sup></p></div>
+  <div class="b ainur sm" id="v7s" style="margin-top:2.5mm"><h4>Vána</h4><div class="s">the Ever-young</div><p>Yavanna's younger sister. Where she passes, flowers open and birds burst into song.</p></div>
+  <div class="b ainur sm" id="v7a" style="margin-left:3mm"><h4>Tilion</h4><p>A hunter of Oromë's company; steers the Moon.<sup>5</sup></p></div>
+  <div class="b ainur sm" id="v7b" style="margin-left:3mm"><h4>Arien</h4><p>Fire-spirit who tended Vána's golden flowers; guides the Sun.<sup>5</sup></p></div>
+  <div class="b ainur sm" id="v7c" style="margin-left:3mm"><h4>Alatar, Pallando</h4><div class="s">the Blue Wizards</div><p>Alatar came from Oromë's people.<sup>4</sup></p></div>
+ </div>
+ <div class="col" style="width:29mm">
+  <div class="b ainur sm" id="v8"><h4>Tulkas</h4><div class="s">the Strong</div><p>Last Vala to come down, to fight Melkor. Laughs in battle and needs no weapon.</p></div>
+  <div class="b ainur sm" id="v8s" style="margin-top:2.5mm"><h4>Nessa</h4><div class="s">the Dancer</div><p>Oromë's sister. Swift as a deer, she loves to dance on the lawns of Valinor.</p></div>
+ </div>
+ <div class="col" style="width:29mm">
+  <div class="b dark sm" id="v9"><h4>Melkor</h4><div class="s">Morgoth · no longer counted</div><p>Began as the mightiest Ainu. He wanted the World for himself, so he is not counted among the Valar.<sup>3</sup></p></div>
+  <div class="b dark sm" id="v9a" style="margin-left:3mm"><h4>Sauron</h4><p>His chief servant, taken from Aulë's people.</p></div>
+  <div class="b dark sm" id="v9b" style="margin-left:3mm"><h4>Balrogs</h4><p>Fire-spirits he won over. Gothmog led them.</p></div>
+  <div class="b unk sm" id="v9c"><h4>Ungoliant</h4><p>A spider-shaped spirit of unknown origin who helped him kill the Two Trees.<sup>16</sup></p></div>
+ </div>
+</div>
+<div class="kick" style="margin:4mm 0 1.5mm">How the World and the Ainur came to be<sup>1</sup></div>
+<div class="row" style="gap:2mm">
+ <div class="b side sm" style="width:53.6mm"><h4>1 · The thought</h4><p>Before anything else existed, Eru thought the Ainur into being and gave each a part of the song.</p></div>
+ <div class="b side sm" style="width:53.6mm"><h4>2 · The Music</h4><p>Together they sang a great Music on themes Eru gave them. Melkor wove in his own loud themes and caused discord.</p></div>
+ <div class="b side sm" style="width:53.6mm"><h4>3 · The vision</h4><p>Eru showed them their Music as a picture of a world. Many of them longed to see it made real.</p></div>
+ <div class="b side sm" style="width:53.6mm"><h4>4 · Eä</h4><p>Eru said "Let it be" (Eä in Elvish), and the World existed, though still unshaped and waiting.</p></div>
+ <div class="b side sm" style="width:53.6mm"><h4>5 · The descent</h4><p>Any Ainu could enter, but had to stay until the World's end. The mighty became Valar; the rest, Maiar.</p></div>
+</div>
+<script type="text/links">
+p2eru p2ainur h #b8860b
+p2ainur v1 v #b8860b
+p2ainur v2 v #b8860b
+p2ainur v3 v #b8860b
+p2ainur v4 v #b8860b
+p2ainur v5 v #b8860b
+p2ainur v6 v #b8860b
+p2ainur v7 v #b8860b
+p2ainur v8 v #b8860b
+p2ainur v9 vd #9b2d30 rebelled dash
+v1 v1s mv
+v3 v3s mv
+v4 v4s mv
+v5 v5s mv
+v7 v7s mv
+v8 v8s mv
+v1s v1a t #b8860b
+v1s v1b t #b8860b
+v1s v1c t #2f6b4f
+v2 v2a t #b8860b
+v2 v2b t #b8860b
+v2 v2c t #b8860b
+v3s v3a t #b8860b
+v3s v3b t #9b2d30 dash
+v3s v3c t #b8860b
+v5s v5a t #b8860b
+v5s v5b t #b8860b
+v7s v7a t #b8860b
+v7s v7b t #b8860b
+v7s v7c t #b8860b
+v9 v9a t #9b2d30
+v9 v9b t #9b2d30
+</script>
+</section>
+<!-- ============ PLATE III ============ -->
+<section class="page">
+<div class="kick">Plate III · The Firstborn</div>
+<h1>The Elves and the Great Parting</h1>
+<p class="lede">The Elves first opened their eyes by Cuiviénen, a lake lit only by stars. From then on they kept dividing over one question: whether to make the long journey West to the Valar.<sup>6</sup></p>
+<div style="display:grid;grid-template-columns:repeat(6,1fr);column-gap:2.6mm;row-gap:4.5mm;align-items:start;position:relative">
+ <div class="b eru sm" id="p3eru" style="grid-column:1;grid-row:1"><h4>Eru Ilúvatar</h4><p>Elves were Eru's own idea; the Valar had no part in it.</p></div>
+ <div class="b child" id="p3q" style="grid-column:2/6;grid-row:1;width:120mm;justify-self:center"><h4>The Quendi</h4><div class="s">"those who speak with voices"</div><p>The first Elves, awake by Cuiviénen in the far East while only starlight shone. A later story says there were 144 at first, in three companies, under Imin, Tata and Enel.<sup>6</sup></p></div>
+ <div class="b dark sm" id="p3mel" style="grid-column:6;grid-row:1"><h4>Taken by Melkor</h4><p>Before Oromë found them, Elves who wandered off were snatched by Melkor's creatures. Most tales say Orcs were bred from these captives.<sup>10</sup></p></div>
+ <div class="b child" id="p3eldar" style="grid-column:2/5;grid-row:2;width:80mm;justify-self:center"><h4>The Eldar</h4><div class="s">"people of the stars"</div><p>Oromë found them and the Valar invited them to Valinor. Those who said yes set out on the Great Journey.</p></div>
+ <div class="b child sm" id="p3avari" style="grid-column:5;grid-row:2"><h4>Avari</h4><div class="s">"the unwilling"</div><p>Refused the journey and stayed in the East; their story is mostly untold.</p></div>
+ <div class="col" style="grid-column:1;grid-row:3">
+  <div class="b child sm" id="p3van"><h4>Vanyar</h4><div class="s">Fair Elves</div><p>Their king Ingwë was High King of all Elves. Every one of them reached Valinor, and few ever came back.</p></div>
+  <div class="who"><b class="t">Who's who</b><p><b>Ingwë</b>, their king.</p><p><b>Indis</b>, Finwë's second wife; Fingolfin and Finarfin were her sons.</p></div>
+ </div>
+ <div class="col" style="grid-column:2;grid-row:3">
+  <div class="b child sm" id="p3nol"><h4>Noldor</h4><div class="s">Deep Elves</div><p>Led by Finwë. Lovers of knowledge and craft, friends of Aulë. Fëanor made the Silmarils.<sup>11</sup></p></div>
+  <div class="b child sm" id="p3exile" style="margin-top:4mm"><h4>Noldor in Exile</h4><p>After Morgoth stole the Silmarils, most of the Noldor followed Fëanor back to Middle-earth to make war on him.<sup>11</sup></p></div>
+  <div class="who"><b class="t">Who's who</b><p><b>Fëanor</b>, who made the Silmarils.</p><p><b>Fingolfin</b> and <b>Finarfin</b>, his half-brothers.</p><p><b>Galadriel</b>, Finarfin's daughter.</p><p><b>Finrod</b>, her brother, friend of Men.</p><p><b>Turgon</b>, king of Gondolin.</p><p><b>Gil-galad</b>, last High King in Middle-earth.<sup>16</sup></p><p><b>Celebrimbor</b>, Fëanor's grandson, maker of the Three Rings.<sup>14</sup></p></div>
+ </div>
+ <div style="grid-column:3/6;grid-row:3/5;display:grid;grid-template-columns:repeat(3,1fr);column-gap:2.6mm;row-gap:4.5mm;align-items:start">
+ <div class="b child" id="p3tel" style="grid-column:1/4;width:90mm;justify-self:center"><h4>Teleri</h4><div class="s">the Last-comers</div><p>The biggest company and the slowest, always lingering. Two brothers, Elwë and Olwë, were their kings. Along the way they split three ways.</p></div>
+ <div class="col" style="grid-column:1">
+  <div class="b child sm" id="p3fal"><h4>Falmari</h4><div class="s">Sea-elves</div><p>Under Olwë they finally crossed the sea and built Alqualondë, the Swan Haven, on the shores of Valinor.</p></div>
+  <div class="who"><b class="t">Who's who</b><p><b>Olwë</b>, king at Alqualondë.</p><p><b>Eärwen</b>, his daughter; Galadriel's mother.</p></div>
+ </div>
+ <div class="col" style="grid-column:2">
+  <div class="b child sm" id="p3sin"><h4>Sindar</h4><div class="s">Grey-elves</div><p>Stayed in Beleriand searching for Elwë, who was lost in a wood after meeting Melian. As King Thingol he later ruled them.</p></div>
+  <div class="who"><b class="t">Who's who</b><p><b>Thingol</b> and <b>Melian</b>, king and queen of Doriath.</p><p><b>Lúthien</b>, their daughter (Plate V).</p><p><b>Círdan</b>, the Shipwright.</p><p><b>Celeborn</b>, Thingol's kinsman, Galadriel's husband.</p><p><b>Thranduil</b>, king in Mirkwood; father of <b>Legolas</b>.</p></div>
+ </div>
+ <div class="col" style="grid-column:3">
+  <div class="b child sm" id="p3nan"><h4>Nandor</h4><div class="s">those who turned back</div><p>Led by Lenwë, they stopped at the Misty Mountains. Their descendants include the Silvan Elves of the woods and the Green-elves.</p></div>
+  <div class="who"><b class="t">Who's who</b><p><b>Silvan Elves</b> of Lothlórien and Mirkwood.</p><p><b>Amroth</b>, a lord of Lórien in the Third Age.</p></div>
+ </div>
+ </div>
+ <div class="col" style="grid-column:6;grid-row:3/5">
+  <div class="b mixed sm" id="p3half" style="margin-top:22mm"><h4>The Half-elven</h4><div class="s">Peredhil</div><p>Elrond and his children come from Sindar, Noldor and Men all at once. They were given a choice of fate. See Plate V.<sup>13</sup></p></div>
+ </div>
+</div>
+<div class="row" style="margin-top:4mm;gap:2.6mm">
+ <div class="b side sm" style="width:67mm"><h4>Three who went ahead</h4><p>Oromë first took Ingwë, Finwë and Elwë to see Valinor for themselves. They came back amazed by the light of the Trees, and talked many of their people into the journey.</p></div>
+ <div class="b side sm" style="width:67mm"><h4>An island for a ship</h4><p>Ulmo ferried the Vanyar and Noldor over the sea on a floating island. The Teleri came later; Ossë taught them about ships, and swans finally drew their fleet to Valinor.</p></div>
+ <div class="b side sm" style="width:67mm"><h4>The hidden kingdom</h4><p>Thingol and Melian ruled the forest realm of Doriath. Melian's power wrapped it in an unseen fence that no enemy could get through, until treachery from within.</p></div>
+ <div class="b side sm" style="width:67mm"><h4>By the Third Age</h4><p>The Elves who remained lived mostly in Rivendell, Lothlórien, Mirkwood and the Grey Havens. One by one they took ship into the West.</p></div>
+</div>
+<div class="row" style="margin-top:3mm;gap:2.6mm">
+ <div class="band" style="width:calc(50% - 1.3mm)"><b>Calaquendi</b>, Elves of the Light: those who lived in Valinor and saw the Two Trees.</div>
+ <div class="band" style="width:calc(50% - 1.3mm)"><b>Moriquendi</b>, Elves of the Darkness: those who never saw the Trees' light. <b>Úmanyar</b> means those who set out but never reached Valinor.</div>
+</div>
+<script type="text/links">
+p3eru p3q h #2b4c7e woke
+p3q p3mel h #9b2d30 seized dash
+p3q p3eldar v #2b4c7e accepted
+p3q p3avari v #2b4c7e refused
+p3eldar p3van v #2b4c7e
+p3eldar p3nol v #2b4c7e
+p3eldar p3tel v #2b4c7e
+p3nol p3exile t #2b4c7e
+p3tel p3fal v #2b4c7e
+p3tel p3sin v #2b4c7e
+p3tel p3nan v #2b4c7e
+</script>
+</section>
+<!-- ============ PLATE IV ============ -->
+<section class="page">
+<div class="kick">Plate IV · The Secondborn</div>
+<h1>Men, Hobbits and the Kingdoms of Men</h1>
+<p class="lede">The Secondborn arrived with the first sunrise. Some befriended the Elves and grew great, some never met them, and some fell under the Shadow. Hobbits belong to this family too.<sup>7</sup></p>
+<div style="display:grid;grid-template-columns:repeat(5,1fr);column-gap:2.6mm;row-gap:4.5mm;align-items:start">
+ <div class="b eru sm" id="p4eru" style="grid-column:1;grid-row:1"><h4>Eru Ilúvatar</h4><p>Planned Men himself, in a later theme of the Music.<sup>7</sup></p></div>
+ <div class="b child" id="p4men" style="grid-column:2/5;grid-row:1;width:130mm;justify-self:center"><h4>Men</h4><div class="s">the Secondborn · Atani · the Followers</div><p>Woke in Hildórien, far in the East, as the Sun first rose. Restless and short-lived. At death they leave the World for somewhere not even the Valar know: the Gift of Men.<sup>7</sup></p></div>
+ <div class="b side sm" id="p4far" style="grid-column:5;grid-row:1"><h4>Three kinds of Men</h4><p>Faramir of Gondor once sorted Men three ways: the High (from Númenor), the Middle (Rohan, for example) and the Wild.</p></div>
+ <div class="col" style="grid-column:1;grid-row:2">
+  <div class="b child sm" id="p4edain"><h4>Edain</h4><div class="s">Elf-friends · three houses</div><p>Three houses, Bëor's, Haleth's and Hador's, crossed into Beleriand and fought beside the Elves against Morgoth.</p></div>
+  <div class="b child sm" id="p4num" style="margin-left:3mm"><h4>Númenóreans</h4><div class="s">the Dúnedain · Men of the West</div><p>Rewarded with Númenor, an island far out in the sea, and three times a normal lifespan. One rule: never sail west out of sight of it.<sup>12</sup></p></div>
+  <div class="b child sm" id="p4faith" style="margin-left:6mm"><h4>The Faithful</h4><div class="s">Elendili</div><p>Kept faith with the Valar and the Elves; their leaders were the Lords of Andúnië.</p></div>
+  <div class="b child sm" id="p4elen" style="margin-left:9mm"><h4>Elendil</h4><div class="s">with his sons Isildur and Anárion</div><p>Fled the sinking in nine ships and set up two kingdoms in exile.</p></div>
+  <div class="row" style="margin-left:9mm;gap:1.6mm">
+   <div class="b child sm" id="p4arnor" style="width:50%"><h4>Arnor</h4><p>The North. Isildur's line.</p></div>
+   <div class="b child sm" id="p4gondor" style="width:50%"><h4>Gondor</h4><p>The South. Kings, then Stewards.</p></div>
+  </div>
+  <div class="b child sm" id="p4arag" style="margin-left:9mm"><h4>Dúnedain → Aragorn</h4><p>Arnor's heirs became the Rangers of the North. Aragorn, their chieftain, was crowned King Elessar.<sup>13</sup></p></div>
+ </div>
+ <div class="col" style="grid-column:2;grid-row:2;padding-top:24mm">
+  <div class="b dark sm" id="p4king"><h4>The King's Men</h4><p>Grew jealous of the Elves' long life and came to hate the Ban. Their last king, Ar-Pharazôn, brought Sauron back as a captive, and he became their adviser and ruin.<sup>12</sup></p></div>
+  <div class="b dark sm" id="p4black" style="margin-left:3mm"><h4>Black Númenóreans</h4><p>Númenórean colonists who went over to Sauron, such as his Mouth and some of the Nazgûl.</p></div>
+  <div class="b side sm" id="p4why"><h4>Why Númenor fell</h4><p>Wanting the Valar's undying lands, the last king sailed to attack them. Eru changed the shape of the World, and Númenor sank under the sea.<sup>12</sup></p></div>
+ </div>
+ <div class="col" style="grid-column:3;grid-row:2">
+  <div class="b child sm" id="p4mid"><h4>Middle Peoples</h4><div class="s">Men of the Twilight</div><p>Relatives of the Edain who stayed behind, far east of Beleriand.</p></div>
+  <div class="b child sm" id="p4roh" style="margin-left:3mm"><h4>Rohirrim</h4><div class="s">Riders of Rohan</div><p>Horse-lords from the north who rode to save Gondor and were given the land of Rohan. Théoden, Éomer and Éowyn are theirs.</p></div>
+  <div class="b child sm" id="p4dale" style="margin-left:3mm"><h4>Dale and Lake-town</h4><p>Bard the Bowman shot Smaug and became King of Dale.</p></div>
+  <div class="b child sm" id="p4beorn" style="margin-left:3mm"><h4>Beornings</h4><p>Beorn could take the shape of a great bear.</p></div>
+  <div class="b child sm" id="p4wood" style="margin-left:3mm"><h4>Woodmen</h4><p>Hardy folk living on the western edge of Mirkwood.</p></div>
+ </div>
+ <div class="col" style="grid-column:4;grid-row:2">
+  <div class="b child sm" id="p4wild"><h4>Men of Darkness</h4><div class="s">the Wild</div><p>Those who never journeyed west to meet the Elves. Many were deceived by Morgoth and then by Sauron, but not all.</p></div>
+  <div class="b child sm" id="p4east" style="margin-left:3mm"><h4>Easterlings</h4><p>Peoples of the East; many fought for Sauron.</p></div>
+  <div class="b child sm" id="p4harad" style="margin-left:3mm"><h4>Haradrim</h4><div class="s">Southrons</div><p>From the hot South; they brought great war-beasts.</p></div>
+  <div class="b child sm" id="p4dun" style="margin-left:3mm"><h4>Dunlendings</h4><p>Hill-folk with an old grudge against Rohan; Saruman stirred them up.</p></div>
+  <div class="b child sm" id="p4wose" style="margin-left:3mm"><h4>Drúedain</h4><div class="s">Woses · Wild Men</div><p>An ancient woodland people, no friends of Sauron; Ghân-buri-Ghân guided Rohan's riders.</p></div>
+  <div class="b dark sm" id="p4naz" style="margin-left:3mm"><h4>Nazgûl</h4><div class="s">Ringwraiths</div><p>Nine great Men bound to Sauron by his Rings.<sup>14</sup></p></div>
+ </div>
+ <div class="col" style="grid-column:5;grid-row:2">
+  <div class="b child sm" id="p4hob"><h4>Hobbits</h4><div class="s">Halflings · Periannath</div><p>A small, cheerful branch of Men. Where they began is not known; the earliest stories place them in the Vales of Anduin.<sup>15</sup></p></div>
+  <div class="b child sm" id="p4breeds" style="margin-left:3mm"><h4>Three breeds</h4><p><b>Harfoots</b>, small and the most usual; <b>Stoors</b>, stockier and fond of rivers; <b>Fallohides</b>, taller, fairer and friends of Elves.</p></div>
+  <div class="b child sm" id="p4shire" style="margin-left:3mm"><h4>The Shire</h4><p>Settled in the year 1601 of the Third Age by the brothers Marcho and Blanco.</p></div>
+  <div class="b child sm" id="p4bag" style="margin-left:3mm"><h4>Bilbo, Frodo, Sam, Merry, Pippin</h4><p>Bilbo found the One Ring; Frodo and Sam carried it to Mount Doom; Merry and Pippin joined the Fellowship.</p></div>
+  <div class="b child sm" id="p4gol" style="margin-left:3mm"><h4>Sméagol · Gollum</h4><p>Of a river folk close to the Stoors. Nearly five centuries with the Ring wore him away.</p></div>
+ </div>
+</div>
+<div class="kick" style="margin:4mm 0 1.5mm">The kingdoms of Men at a glance</div>
+<div class="row" style="gap:2.6mm">
+ <div class="b side sm" style="width:53.4mm"><h4>First Age</h4><p>The three houses of the Edain fight beside the Elves in Beleriand. Beren, Túrin and Tuor come from them.</p></div>
+ <div class="b side sm" style="width:53.4mm"><h4>Second Age</h4><p>Númenor rises, grows proud, and sinks (year 3319). Elendil's exiles found Arnor and Gondor.</p></div>
+ <div class="b side sm" style="width:53.4mm"><h4>Third Age</h4><p>Arnor breaks up and fades; its heirs become Rangers. Gondor's kings fail and Stewards rule. Rohan is founded (year 2510).</p></div>
+ <div class="b side sm" style="width:53.4mm"><h4>War of the Ring</h4><p>Third Age 3018 to 3019. Gondor and Rohan stand together while Frodo and Sam destroy the One Ring.</p></div>
+ <div class="b side sm" style="width:53.4mm"><h4>Fourth Age</h4><p>Aragorn, crowned King Elessar, rules Arnor and Gondor together again; the age of Men begins.</p></div>
+</div>
+<script type="text/links">
+p4eru p4men h #2b4c7e woke
+p4men p4edain v #2b4c7e
+p4men p4mid v #2b4c7e
+p4men p4wild v #2b4c7e
+p4men p4hob v #2b4c7e
+p4edain p4num t #2b4c7e
+p4num p4faith t #2b4c7e
+p4num p4king h #9b2d30 dash
+p4king p4black t #9b2d30
+p4faith p4elen t #2b4c7e
+p4elen p4arnor v #2b4c7e
+p4elen p4gondor v #2b4c7e
+p4arnor p4arag v #2b4c7e
+p4mid p4roh t #2b4c7e
+p4mid p4dale t #2b4c7e
+p4mid p4beorn t #2b4c7e
+p4mid p4wood t #2b4c7e
+p4wild p4east t #2b4c7e
+p4wild p4harad t #2b4c7e
+p4wild p4dun t #2b4c7e
+p4wild p4wose t #2b4c7e
+p4wild p4naz t #9b2d30 dash
+p4hob p4breeds t #2b4c7e
+p4hob p4shire t #2b4c7e
+p4hob p4bag t #2b4c7e
+p4hob p4gol t #2b4c7e
+</script>
+</section>
+<!-- ============ PLATE V ============ -->
+<section class="page">
+<div class="kick">Plate V · The Half-elven</div>
+<h1>Lúthien's Line: Elves, Men and Kings</h1>
+<p class="lede">One family tree joins Elves, Men and even a Maia, running from Thingol and Melian to Elrond, Arwen and Aragorn. Purple boxes carry mixed blood.</p>
+<div style="position:relative;height:160mm">
+ <div class="b child sm" id="f_thin" style="position:absolute;left:0mm;top:0mm;width:38mm"><h4>Thingol</h4><div class="s">Elwë · Sinda · King of Doriath</div></div>
+ <div class="b ainur sm" id="f_mel" style="position:absolute;left:44mm;top:0mm;width:38mm"><h4>Melian</h4><div class="s">a Maia · Queen of Doriath</div></div>
+ <div class="b child sm" id="f_ber" style="position:absolute;left:0mm;top:18mm;width:38mm"><h4>Beren</h4><div class="s">a Man · House of Bëor</div></div>
+ <div class="b mixed sm" id="f_lut" style="position:absolute;left:44mm;top:18mm;width:38mm"><h4>Lúthien</h4><div class="s">half Elf, half Maia</div></div>
+ <div class="b mixed sm" id="f_dior" style="position:absolute;left:22mm;top:36mm;width:38mm"><h4>Dior</h4><div class="s">Thingol's heir</div></div>
+ <div class="b child sm" id="f_nim" style="position:absolute;left:66mm;top:36mm;width:38mm"><h4>Nimloth</h4><div class="s">Sinda · Dior's wife</div></div>
+ <div class="b mixed sm" id="f_elu" style="position:absolute;left:0mm;top:54mm;width:38mm"><h4>Eluréd and Elurín</h4><div class="s">Dior's sons, lost as boys</div></div>
+ <div class="b mixed sm" id="f_elw" style="position:absolute;left:44mm;top:54mm;width:38mm"><h4>Elwing</h4><div class="s">Dior's daughter</div></div>
+ <div class="b child sm" id="f_tur" style="position:absolute;left:154mm;top:0mm;width:38mm"><h4>Turgon</h4><div class="s">Noldo · King of Gondolin</div></div>
+ <div class="b child sm" id="f_tuor" style="position:absolute;left:110mm;top:36mm;width:38mm"><h4>Tuor</h4><div class="s">a Man · House of Hador</div></div>
+ <div class="b child sm" id="f_idr" style="position:absolute;left:154mm;top:36mm;width:38mm"><h4>Idril</h4><div class="s">Turgon's daughter</div></div>
+ <div class="b mixed sm" id="f_ear" style="position:absolute;left:132mm;top:54mm;width:38mm"><h4>Eärendil</h4><div class="s">the Mariner · the Evening Star</div></div>
+ <div class="b child sm" id="f_cel" style="position:absolute;left:182mm;top:54mm;width:38mm"><h4>Celeborn</h4><div class="s">Sinda · Thingol's kinsman</div></div>
+ <div class="b child sm" id="f_gal" style="position:absolute;left:226mm;top:54mm;width:38mm"><h4>Galadriel</h4><div class="s">Noldo · Finarfin's daughter</div></div>
+ <div class="b mixed sm" id="f_elros" style="position:absolute;left:66mm;top:72mm;width:38mm"><h4>Elros</h4><div class="s">became mortal · Númenor's first king</div></div>
+ <div class="b mixed sm" id="f_elr" style="position:absolute;left:132mm;top:72mm;width:38mm"><h4>Elrond</h4><div class="s">stayed an Elf · master of Rivendell</div></div>
+ <div class="b child sm" id="f_cbr" style="position:absolute;left:182mm;top:72mm;width:38mm"><h4>Celebrían</h4><div class="s">Celeborn and Galadriel's daughter</div></div>
+ <div class="b mixed sm" id="f_twins" style="position:absolute;left:160mm;top:88mm;width:38mm"><h4>Elladan and Elrohir</h4><div class="s">Elrond's twin sons</div></div>
+ <div class="b mixed sm" id="f_arw" style="position:absolute;left:204mm;top:88mm;width:38mm"><h4>Arwen</h4><div class="s">Evenstar · chose a mortal life</div></div>
+ <div class="b child sm" id="f_kings" style="position:absolute;left:66mm;top:90mm;width:38mm"><h4>Kings of Númenor</h4><div class="s">Elros's line, from Tar-Minyatur on</div></div>
+ <div class="b child sm" id="f_elen" style="position:absolute;left:66mm;top:108mm;width:38mm"><h4>Elendil</h4><div class="s">the Tall · of the Lords of Andúnië</div></div>
+ <div class="b child sm" id="f_isil" style="position:absolute;left:44mm;top:126mm;width:38mm"><h4>Isildur</h4><div class="s">kings of Arnor, then the Rangers' chieftains</div></div>
+ <div class="b child sm" id="f_anar" style="position:absolute;left:88mm;top:126mm;width:38mm"><h4>Anárion</h4><div class="s">kings of Gondor</div></div>
+ <div class="b child sm" id="f_arag" style="position:absolute;left:44mm;top:144mm;width:38mm"><h4>Aragorn II</h4><div class="s">Elessar · wed Arwen in Third Age 3019</div></div>
+ <div class="b side sm" style="position:absolute;left:136mm;top:115mm;width:68mm"><h4>The Choice of the Half-elven</h4><p>Eärendil and Elwing reached Valinor to plead for Elves and Men. The Valar let them and their sons choose a kin. Elrond took the Elves' fate, Elros took Men's. Elrond's children could choose too; Arwen gave up Elvish life to marry Aragorn.<sup>13</sup></p></div>
+ <div class="b side sm" style="position:absolute;left:209mm;top:115mm;width:68mm"><h4>Three marriages of Elves and Men</h4><p>Beren and Lúthien, Tuor and Idril, and Aragorn and Arwen. Each tied the two peoples closer and changed the history of the World.</p></div>
+ <div class="b side sm" style="position:absolute;left:136mm;top:143mm;width:68mm"><h4>How are Aragorn and Arwen related?</h4><p>Very distantly. Both come from Eärendil and Elwing: Arwen through Elrond, Aragorn through Elros and many generations of kings. Galadriel is Arwen's grandmother.</p></div>
+ <div class="b side sm" style="position:absolute;left:209mm;top:143mm;width:68mm"><h4>Four bloodlines meet in Elrond</h4><p>Thingol brings Sindarin blood, Melian a Maia's, Turgon the Noldor's, and Beren and Tuor the blood of Men.</p></div>
+ <div class="b side sm" style="position:absolute;left:200mm;top:0mm;width:77mm"><h4>Reading this tree</h4><p>Down lines run from parents to children. Double gold lines join husband and wife. The dashed gold line is the marriage of Aragorn and Arwen, many generations apart.</p></div>
+</div>
+<script type="text/links">
+f_thin f_mel m
+f_thin+f_mel f_lut c #6b4c9a
+f_ber f_lut m
+f_ber+f_lut f_dior c #6b4c9a
+f_dior f_nim m
+f_dior+f_nim f_elu c #6b4c9a
+f_dior+f_nim f_elw c #6b4c9a
+f_tur f_idr v #2b4c7e
+f_tuor f_idr m
+f_tuor+f_idr f_ear c #6b4c9a
+f_elw f_ear m
+f_elw+f_ear f_elros c #6b4c9a
+f_elw+f_ear f_elr c #6b4c9a
+f_cel f_gal m
+f_cel+f_gal f_cbr c #2b4c7e
+f_elr f_cbr m
+f_elr+f_cbr f_twins c #6b4c9a
+f_elr+f_cbr f_arw c #6b4c9a
+f_elros f_kings v #2b4c7e
+f_kings f_elen v #2b4c7e
+f_elen f_isil v #2b4c7e
+f_elen f_anar v #2b4c7e
+f_isil f_arag v #2b4c7e
+f_arag f_arw u #b8860b 49 dash
+</script>
+</section>
+<!-- ============ PLATE VI ============ -->
+<section class="page">
+<div class="kick">Plate VI · Made by the Valar</div>
+<h1>Dwarves, Ents and Eagles</h1>
+<p class="lede">Three peoples that began with a Vala's wish, and the moment each became truly alive. Only Eru can give that, so each story has a moment where he steps in.<sup>8, 9</sup></p>
+<div class="row" style="gap:3mm">
+ <div class="col" style="width:92mm">
+  <div class="b ainur" id="p6aule"><h4>Aulë the Smith</h4><p>Tired of waiting for the Children of Ilúvatar, he longed for people to teach his crafts to.<sup>8</sup></p></div>
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:2mm;margin-left:3mm">
+   <div class="b side sm" id="p6s1"><h4>1 · Made in secret</h4><p>In a hall under the mountains he shaped the Seven Fathers of the Dwarves and invented a language for them, Khuzdul.</p></div>
+   <div class="b side sm" id="p6s2"><h4>2 · Eru's question</h4><p>Eru asked why he had tried this. His Dwarves could only move when Aulë thought about them, like puppets.</p></div>
+   <div class="b side sm" id="p6s3"><h4>3 · The hammer</h4><p>Ashamed, Aulë lifted his hammer to break them. They flinched and begged for mercy, alive in their own right.</p></div>
+   <div class="b side sm" id="p6s4"><h4>4 · Adopted</h4><p>Eru had given them life. But they had to sleep in stone until after the Elves had woken.</p></div>
+  </div>
+  <div class="b made" id="p6dw"><h4>The Dwarves · Khazâd</h4><div class="s">the Seven Fathers and their peoples</div><p>Tough, proud and stubborn, masters of stone and metal, and slow to forget a wrong. They believe Aulë gathers their spirits after death.<sup>8</sup></p></div>
+  <div class="row" style="gap:2mm;margin-left:3mm">
+   <div class="b made sm" id="p6long" style="width:33%"><h4>Longbeards</h4><div class="s">Durin's Folk</div><p>The senior house. Their father Durin woke under Mount Gundabad and later built Khazad-dûm (Moria).</p></div>
+   <div class="b made sm" id="p6fire" style="width:33%"><h4>Firebeards, Broadbeams</h4><p>Lived in Nogrod and Belegost in the Blue Mountains during the First Age.</p></div>
+   <div class="b made sm" id="p6east" style="width:33%"><h4>Four eastern houses</h4><p>Ironfists, Stiffbeards, Blacklocks and Stonefoots. Their stories are hardly told.</p></div>
+  </div>
+  <div class="who" style="margin-left:3mm"><b class="t">Who's who</b><p><b>Thrór</b>, <b>Thráin</b> and <b>Thorin Oakenshield</b>: Durin's heirs; Thorin's quest is the story of The Hobbit.</p><p><b>Balin</b> tried to win back Moria. <b>Dáin Ironfoot</b> became King under the Mountain. <b>Gimli</b>, Glóin's son, joined the Fellowship.</p></div>
+ </div>
+ <div class="col" style="width:92mm">
+  <div class="b ainur" id="p6yav"><h4>Yavanna Kementári</h4><p>Queen of the Earth. She learned of the Dwarves and worried for her trees, which can't run away.<sup>9</sup></p></div>
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:2mm;margin-left:3mm">
+   <div class="b side sm" id="p6y1"><h4>1 · A worry</h4><p>Dwarves would cut her forests without care. Who would speak up for the trees?</p></div>
+   <div class="b side sm" id="p6y2"><h4>2 · A request</h4><p>She asked Manwë. Thinking on it, Manwë saw again the Music and Eru's answer.</p></div>
+  </div>
+  <div class="b side sm" id="p6y3" style="margin-left:3mm"><h4>3 · The answer</h4><p>When the Children woke, spirits would come to live in trees and guard them, and Eagles would live in the mountains, watching over the land.</p></div>
+  <div class="b made" id="p6ents"><h4>The Ents · Onodrim</h4><div class="s">Shepherds of the Trees</div><p>Tall, slow and careful, part tree and part person. The Elves woke them to speech. They look after the forests as shepherds look after sheep.<sup>9</sup></p></div>
+  <div class="b made sm" id="p6tb" style="margin-left:3mm"><h4>Treebeard</h4><div class="s">Fangorn</div><p>Eldest of the Ents still walking in the Third Age; Gandalf counted him the oldest living thing under the Sun.</p></div>
+  <div class="b made sm" id="p6ew" style="margin-left:3mm"><h4>Entwives</h4><p>Preferred tidy gardens and fields to wild woods. They wandered away and were never found.</p></div>
+  <div class="b unk sm" id="p6hu" style="margin-left:3mm"><h4>Huorns</h4><div class="s">nature uncertain</div><p>Trees that grew watchful and fierce, or Ents gone half-tree. Orcs who fled into them after Helm's Deep never came out.<sup>16</sup></p></div>
+  <div class="b side sm" id="p6trees"><h4>The Two Trees</h4><p>Yavanna sang Telperion (silver) and Laurelin (gold) to light Valinor. When they were killed, their last flower and fruit became the Moon and the Sun.<sup>5</sup></p></div>
+ </div>
+ <div class="col" style="width:87mm">
+  <div class="b ainur" id="p6man"><h4>Manwë Súlimo</h4><p>Ruler of Arda and master of the winds. He watches the World from his throne on Taniquetil.</p></div>
+  <div class="b made" id="p6eag" style="margin-left:3mm"><h4>The Great Eagles</h4><div class="s">Manwë's messengers</div><p>Huge, speaking birds who bring Manwë news and step in at desperate moments. Whether they were spirits in eagle shape or true living birds, Tolkien never quite settled.<sup>9, 16</sup></p></div>
+  <div class="row" style="gap:2mm;margin-left:6mm">
+   <div class="b made sm" id="p6thor" style="width:50%"><h4>Thorondor</h4><div class="s">First Age</div><p>King of Eagles. He scarred Morgoth's face, and carried away Fingolfin's body.</p></div>
+   <div class="b made sm" id="p6gw" style="width:50%"><h4>Gwaihir, Landroval</h4><div class="s">Third Age</div><p>Rescued Gandalf from Orthanc, and Frodo and Sam from Mount Doom.</p></div>
+  </div>
+  <div class="b ainur" id="p6oro" style="margin-top:2mm"><h4>Oromë the Huntsman</h4><p>Hunter, rider and keeper of hounds, at home in the wild forests of Middle-earth.</p></div>
+  <div class="row" style="gap:2mm;margin-left:3mm">
+   <div class="b made sm" id="p6huan" style="width:50%"><h4>Huan</h4><div class="s">Hound of Valinor</div><p>Given to the Elf-lord Celegorm. He helped Beren and Lúthien, and fell fighting the great wolf Carcharoth.</p></div>
+   <div class="b unk sm" id="p6mea" style="width:50%"><h4>The Mearas</h4><div class="s">Shadowfax's line</div><p>Horses of Rohan's kings. Rohan's tale says Oromë brought their first sire from the West.</p></div>
+  </div>
+ </div>
+</div>
+<div class="banner" style="margin-top:3mm"><h4>The rule behind it all</h4><p>Life is Eru's alone to give. A Vala may build a body, or call a spirit to it, but cannot make it truly alive. That is why the Dark could only copy and corrupt, and never create.<sup>10</sup></p></div>
+<script type="text/links">
+p6aule p6s1 t #b8860b
+p6aule p6dw t #2f6b4f gave
+p6dw p6long t #2f6b4f
+p6yav p6y1 t #b8860b
+p6yav p6ents t #2f6b4f
+p6ents p6tb t #2f6b4f
+p6ents p6ew t #2f6b4f
+p6ents p6hu t #7d7466 dash
+p6man p6eag t #2f6b4f
+p6eag p6thor t #2f6b4f
+p6oro p6huan t #2f6b4f
+</script>
+</section>
+<!-- ============ PLATE VII ============ -->
+<section class="page">
+<div class="kick">Plate VII · The Shadow</div>
+<h1>The Dark and Its Servants</h1>
+<p class="lede">Melkor had no power to create, so his followers were spirits he lured away, creatures he bred from living things, or peoples he tricked. Sauron did the same after him.<sup>10</sup></p>
+<div style="display:grid;grid-template-columns:repeat(7,1fr);column-gap:2.4mm;row-gap:4.5mm;align-items:start">
+ <div class="b unk sm" id="p7unk" style="grid-column:1/3;grid-row:1;width:80mm"><h4>Origins unknown</h4><p>The many-armed thing in the pool by Moria's west gate, and the unnamed creatures Gandalf found gnawing the roots of the world far below Moria.<sup>16</sup></p></div>
+ <div class="b dark" id="p7mel" style="grid-column:3/6;grid-row:1"><h4>Melkor · Morgoth</h4><div class="s">the great Enemy</div><p>Wrecked the Lamps, destroyed the Trees with Ungoliant's help and seized the Silmarils. Defeated at last in the War of Wrath and cast out of the World.<sup>3</sup></p></div>
+ <div class="b unk sm" id="p7ung" style="grid-column:6/8;grid-row:1;width:80mm;justify-self:end"><h4>Ungoliant</h4><div class="s">origin unknown · her own master</div><p>A spirit in spider form. She helped Melkor kill the Trees, then turned on him. The spiders of Mirkwood and Shelob came from her.<sup>16</sup></p></div>
+ <div class="b dark sm" id="p7sau" style="grid-column:1/3;grid-row:2"><h4>Sauron</h4><div class="s">Maia turned traitor · later Dark Lord</div><p>Once a Maia of Aulë. Morgoth's chief servant; afterwards a Dark Lord himself. Forged the One Ring about Second Age 1600.<sup>14</sup></p></div>
+ <div class="col" style="grid-column:1;grid-row:3;margin-top:-1.5mm">
+  <div class="b dark sm" id="p7naz"><h4>Nazgûl</h4><div class="s">Ringwraiths</div><p>Nine Men held by the Nine Rings.<sup>14</sup></p></div>
+  <div class="b dark sm" id="p7wk" style="margin-left:3mm"><h4>Witch-king</h4><div class="s">of Angmar</div><p>Leader of the Nazgûl; brought down by Éowyn with Merry's help.</p></div>
+  <div class="b dark sm" id="p7kh" style="margin-left:3mm"><h4>Khamûl</h4><p>The Easterling, second of the Nine.</p></div>
+ </div>
+ <div class="col" style="grid-column:2;grid-row:3;margin-top:-1.5mm">
+  <div class="b dark sm" id="p7wi"><h4>Barrow-wights</h4><p>Evil spirits sent by the Witch-king into old tombs.</p></div>
+  <div class="b dark sm" id="p7mouth"><h4>Mouth of Sauron</h4><p>A Black Númenórean; his herald.</p></div>
+  <div class="b dark sm" id="p7sar"><h4>Saruman</h4><div class="s">fallen Istar</div><p>A Wizard who wanted power for himself. Through a seeing-stone he fell under Sauron's sway, and filled Isengard with his own breeds of Orc.<sup>4</sup></p></div>
+ </div>
+ <div class="col" style="grid-column:3;grid-row:2/4">
+  <div class="b dark sm" id="p7bal"><h4>Balrogs</h4><div class="s">fallen Maiar</div><p>Fire wrapped in darkness, armed with flaming whips.</p></div>
+  <div class="b dark sm" id="p7goth" style="margin-left:3mm"><h4>Gothmog</h4><p>Their captain. He and Ecthelion killed each other when Gondolin fell.</p></div>
+  <div class="b dark sm" id="p7db" style="margin-left:3mm"><h4>Durin's Bane</h4><p>Woken in Moria; slain by Gandalf.</p></div>
+ </div>
+ <div class="col" style="grid-column:4;grid-row:2/4">
+  <div class="b dark sm" id="p7orc"><h4>Orcs</h4><div class="s">Goblins in The Hobbit</div><p>Bred by Morgoth; most tales say from captured Elves.<sup>10</sup></p></div>
+  <div class="b dark sm" id="p7gob" style="margin-left:3mm"><h4>Goblin chiefs</h4><p>Azog, his son Bolg, and the Great Goblin of the Misty Mountains.</p></div>
+  <div class="b dark sm" id="p7uruk" style="margin-left:3mm"><h4>Uruk-hai</h4><p>Big, strong Orcs that could bear sunlight; first seen near Third Age 2475.</p></div>
+  <div class="b dark sm" id="p7half" style="margin-left:3mm"><h4>Half-orcs</h4><p>Saruman's mix of Orcs and Men.</p></div>
+ </div>
+ <div class="col" style="grid-column:5;grid-row:2/4">
+  <div class="b dark sm" id="p7tro"><h4>Trolls</h4><p>Made by Morgoth in mockery of the Ents.<sup>10</sup></p></div>
+  <div class="b dark sm" id="p7stone" style="margin-left:3mm"><h4>Stone-trolls</h4><p>Bert, Tom and William from The Hobbit; daylight turned them to stone.</p></div>
+  <div class="b dark sm" id="p7olog" style="margin-left:3mm"><h4>Olog-hai</h4><p>Sauron's trolls who could bear the Sun.</p></div>
+ </div>
+ <div class="col" style="grid-column:6;grid-row:2/4">
+  <div class="b dark sm" id="p7dra"><h4>Dragons</h4><p>Fire-drakes and cold-drakes bred by Morgoth.<sup>10</sup></p></div>
+  <div class="b dark sm" id="p7gla" style="margin-left:3mm"><h4>Glaurung</h4><p>Father of dragons, wingless; slain by Túrin.</p></div>
+  <div class="b dark sm" id="p7anc" style="margin-left:3mm"><h4>Ancalagon the Black</h4><p>Greatest winged dragon; brought down by Eärendil.</p></div>
+  <div class="b dark sm" id="p7sma" style="margin-left:3mm"><h4>Smaug the Golden</h4><p>Took Erebor in Third Age 2770; shot by Bard in 2941.</p></div>
+ </div>
+ <div class="col" style="grid-column:7;grid-row:2/4">
+  <div class="b dark sm" id="p7wer"><h4>Werewolves</h4><p>Wolf-shapes housing evil spirits.<sup>10</sup></p></div>
+  <div class="b dark sm" id="p7dr" style="margin-left:3mm"><h4>Draugluin</h4><p>Their sire; slain by Huan.</p></div>
+  <div class="b dark sm" id="p7car" style="margin-left:3mm"><h4>Carcharoth</h4><p>Bit off Beren's hand with a Silmaril in it.</p></div>
+  <div class="b dark sm" id="p7war" style="margin-left:3mm"><h4>Wargs</h4><p>Third Age wolves who hunted alongside Orcs.</p></div>
+ </div>
+</div>
+<div class="kick" style="margin:4mm 0 1.5mm">Strongholds of the Dark</div>
+<div class="row" style="gap:2.4mm">
+ <div class="b dark sm" style="width:44mm"><h4>Utumno</h4><p>Melkor's first fortress, far in the North; broken by the Valar to protect the newly woken Elves.</p></div>
+ <div class="b dark sm" style="width:44mm"><h4>Angband</h4><p>His iron fortress in the First Age, under the smoking peaks of Thangorodrim.</p></div>
+ <div class="b dark sm" style="width:44mm"><h4>Barad-dûr</h4><p>Sauron's Dark Tower in Mordor, built with the power of the One Ring.</p></div>
+ <div class="b dark sm" style="width:44mm"><h4>Dol Guldur</h4><p>The hill-fort in southern Mirkwood where Sauron hid as "the Necromancer".</p></div>
+ <div class="b dark sm" style="width:44mm"><h4>Minas Morgul</h4><p>Once Gondor's Minas Ithil; taken by the Nazgûl, who made it their city.</p></div>
+ <div class="b dark sm" style="width:44mm"><h4>Isengard</h4><p>Gondor's old ring-wall with the tower Orthanc, where Saruman built his army.</p></div>
+</div>
+<div class="kick" style="margin:4mm 0 1.5mm">Three ways the Dark gained servants</div>
+<div class="row" style="gap:2.4mm">
+ <div class="b dark sm" style="width:68mm"><h4>Spirits won over</h4><p>Maiar who followed Melkor's splendour: Sauron and the Balrogs.</p></div>
+ <div class="b dark sm" style="width:68mm"><h4>Bred from the living</h4><p>Orcs, Trolls, dragons and wolves: copies or twisted versions of real creatures, never new life.</p></div>
+ <div class="b dark sm" style="width:68mm"><h4>Peoples deceived</h4><p>Men who served out of fear, lies or Ring-lust: the Nazgûl, Númenórean renegades, and many from the East and South.</p></div>
+ <div class="b side sm" style="width:68mm"><h4>Two Dark Lords</h4><p>Morgoth meant to possess the whole World or wreck it, and spread his strength thin trying. Sauron wanted to be its master, and locked much of his strength inside the One Ring.<sup>3, 14</sup></p></div>
+</div>
+<script type="text/links">
+p7mel p7sau v #9b2d30
+p7mel p7bal v #9b2d30
+p7mel p7orc v #9b2d30
+p7mel p7tro v #9b2d30
+p7mel p7dra v #9b2d30
+p7mel p7wer v #9b2d30
+p7ung p7mel h #7d7466 dash
+p7sau p7naz v #9b2d30
+p7naz p7wk t #9b2d30
+p7naz p7kh t #9b2d30
+p7sau p7wi v #9b2d30
+p7sau p7mouth k #9b2d30
+p7sau p7sar k #9b2d30
+p7bal p7goth t #9b2d30
+p7bal p7db t #9b2d30
+p7orc p7gob t #9b2d30
+p7orc p7uruk t #9b2d30
+p7orc p7half t #9b2d30
+p7tro p7stone t #9b2d30
+p7tro p7olog t #9b2d30
+p7dra p7gla t #9b2d30
+p7dra p7anc t #9b2d30
+p7dra p7sma t #9b2d30
+p7wer p7dr t #9b2d30
+p7wer p7car t #9b2d30
+p7wer p7war t #9b2d30
+</script>
+</section>
+<!-- ============ NOTES I ============ -->
+<section class="page" data-notes="1">
+<div class="kick">Notes I</div>
+<h1>Notes: How It All Began</h1>
+<p class="lede">Each number matches a gold figure on the plates. Everything here is retold in our own words.</p>
+<div class="notes">
+<div class="note"><h3><span class="n">1</span>Eru and the Music</h3>
+<p>Before there was anything, there was Eru, called Ilúvatar by the Elves, meaning All-Father. He is the single Creator in Tolkien's world. From his thought he made the Ainur, the Holy Ones, and gave each of them a part of his mind to understand.</p>
+<p>He set them a great theme and they sang it together: the Music of the Ainur. Melkor, the mightiest of them, wanted to add things of his own, and his loud themes clashed with the rest. Eru answered with new themes, and twice more Melkor's noise rose against them. Finally Eru ended the Music with one great chord.</p>
+<p>Then he showed the Ainur a vision of what they had sung: a world, and the story it would hold. Some longed to see it real. So Eru said "Eä!", "Let it be!", and the World existed. Ainur who loved it could go into it, but only by binding themselves to it until the end. The Elves and Men were Eru's own theme, which the Ainur had no part in, so they did not fully understand them.</p></div>
+<div class="note"><h3><span class="n">2</span>The Valar</h3>
+<p>Fourteen great Ainur entered the World and set about shaping it: seven lords and seven queens, the Valar or "Powers". Men in later days sometimes took them for gods, but Tolkien is clear they are created spirits, far greater than angels, who answer to Eru.</p>
+<p>They can wear bodies like clothing, and most often appear as tall, noble lords and ladies. Manwë is their king and Varda their queen. Eight of them, the Aratar, are the greatest: Manwë and Varda, Ulmo, Aulë and Yavanna, Oromë, Mandos and Nienna.</p>
+<p>After Melkor ruined their first home in the middle of the World, they withdrew to Valinor, in Aman, the land far in the West, and walled it with mountains.</p></div>
+<div class="note"><h3><span class="n">3</span>Melkor becomes Morgoth</h3>
+<p>Melkor, "he who arises in might", began with more power and knowledge than any other Ainu. He went often into the empty Void looking for the Imperishable Flame, the power to make life, which belongs to Eru alone. He never found it.</p>
+<p>In the World he fought the Valar from the beginning, spoiling whatever they made. He threw down the two great Lamps that lit the World, built fortresses in the North, and later, with Ungoliant, killed the Two Trees of Valinor and stole the Silmarils. The Elf Fëanor then gave him the name Morgoth, the Dark Enemy of the World, and it stuck.</p>
+<p>He poured so much of himself into ruling and twisting the World that his power grew thin. When the First Age closed, the War of Wrath broke his power, and the Valar shut him out of the World, in the Void.</p></div>
+<div class="note"><h3><span class="n">4</span>The Maiar and the Wizards</h3>
+<p>The Maiar are spirits like the Valar, only less mighty. Nobody knows how many there are; few are named. Some served a particular Vala: Eönwë and Manwë, Ossë and Ulmo, Arien and Vána.</p>
+<p>Melkor won some of them over in his early days: the Balrogs, and the greatest of his servants, Sauron, who had once been a Maia of Aulë.</p>
+<p>Around Third Age 1000 the Valar sent five Maiar to Middle-earth to help its peoples stand against Sauron. They came looking like old men, were not allowed to fight his might with might, and were called the Istari, or Wizards. Saruman (Curumo) came from Aulë's people; Gandalf (Olórin) was chosen by Manwë; Radagast (Aiwendil) went at Yavanna's wish; and the two Blue Wizards went into the East. Only Gandalf stayed true to the task to the end.</p></div>
+<div class="note"><h3><span class="n">5</span>Lamps, Trees, Sun and Moon</h3>
+<p><b>The Lamps.</b> At first Aulë made two vast lamps, Illuin and Ormal, which Varda filled with light, and Middle-earth bloomed. Melkor threw them down, and their fall broke the land.</p>
+<p><b>The Trees.</b> In Valinor, Yavanna sang two Trees into being: silver Telperion and golden Laurelin. Their light waxed and waned in turn, and their glow was counted in days. Middle-earth lay under starlight all this time.</p>
+<p><b>The Silmarils.</b> Fëanor trapped the blended light of both Trees inside three gems, the Silmarils. After the Trees were killed, only these held their light.</p>
+<p><b>Sun and Moon.</b> From the dying Trees came one last silver flower and one golden fruit. The Valar set them in vessels that sail the sky; Tilion steers the Moon and Arien the Sun. The first rising of the Moon came before the Sun's, and when the Sun first rose, Men woke.</p></div>
+<div class="note"><h3><span class="n">6</span>The waking of the Elves</h3>
+<p>Varda made the brightest stars, and in that moment the Elves woke beside the mere of Cuiviénen in the East. The first thing they saw was starlight, and they always loved Varda most of the Valar.</p>
+<p>Melkor found them first and his creatures stole some away. When Oromë found them, the Valar went to war to protect them and broke Melkor's fortress. Then they invited the Elves to Valinor. Those who said yes, the Eldar, made the Great Journey West in three companies; on the way some stopped and some turned aside. That is the split shown on Plate III.</p>
+<p>Elves do not age or die of sickness. When one is killed, or fades from sorrow, the spirit goes to the Halls of Mandos and may in time return. They are bound to the World for as long as it lasts.</p></div>
+<div class="note"><h3><span class="n">7</span>The waking of Men</h3>
+<p>Men woke in Hildórien, far in the East, at the first sunrise, which is why they are called the Secondborn, or the Followers. No Vala came to guide them. Morgoth reached them early, and the Edain's own stories hint at a dark choice made in that first time, which they would not talk about.</p>
+<p>Some kept walking west, away from the Shadow, until they met the Elves in Beleriand. These were the Edain, the Elf-friends of the three houses.</p>
+<p>Men are mortal. When they die their spirits pause in the Halls of Mandos and then leave the World altogether, to somewhere only Eru knows. The Elves called this the Gift of Men, though in time Men came to fear it.</p></div>
+<div class="note"><h3><span class="n">8</span>Aulë and the Dwarves</h3>
+<p>Aulë could not wait for the Children of Ilúvatar to arrive. In a secret hall under the mountains of Middle-earth he made seven Fathers of the Dwarves, and taught them a language he invented.</p>
+<p>Eru spoke to him: Aulë had tried to make something only Eru could make, and his Dwarves could only move when he willed them to. Aulë, sorry, raised his hammer to destroy them, and they shrank back and begged for mercy. Eru had given them true life. But the Elves had to be first, so the Fathers were laid to sleep under the stone until after the Elves woke.</p>
+<p>The eldest, Durin, woke alone and founded Khazad-dûm, the great Dwarf city later called Moria. Dwarves say that after death Aulë gathers them in halls of their own in Mandos.</p></div>
+<div class="note"><h3><span class="n">9</span>Yavanna, the Ents and the Eagles</h3>
+<p>When Yavanna heard about the Dwarves, she worried. They would love stone and metal and cut her trees without a second thought. She went to Manwë, who sat in thought and saw the Music again.</p>
+<p>The answer: when the Children of Ilúvatar woke, spirits from far away would come to live among the plants and animals. Some would dwell in trees as shepherds, the Ents, and the Eagles of Manwë would live in the mountains and keep watch. In the Third Age Treebeard told the Hobbits that the Elves had first taught the Ents to speak.</p></div>
+</div>
+</section>
+<!-- ============ NOTES II ============ -->
+<section class="page" data-notes="1">
+<div class="kick">Notes II</div>
+<h1>Notes: Jewels, Rings and Kingdoms</h1>
+<p class="lede">Continued from page 8. Each number matches a gold figure on the plates.</p>
+<div class="notes">
+<div class="note"><h3><span class="n">10</span>Orcs, Trolls and Dragons</h3>
+<p>Morgoth could never invent a new people, because real life comes only from Eru. Everything he had came from bending something that already existed.</p>
+<p>The best-known account says the first Orcs were bred from Elves captured and tortured in Morgoth's dungeons before the Great Journey. Tolkien was never fully happy with this and tried other ideas, so treat it as the most common story rather than the last word.</p>
+<p>Trolls, Treebeard said, were made in mockery of the Ents, as Orcs were of Elves; many of them turned to stone in daylight. Sauron later bred stronger kinds: the Uruks of Mordor, first seen in about Third Age 2475, and the Olog-hai, trolls that could bear the Sun. Saruman bred his own Uruk-hai at Isengard.</p>
+<p>Dragons were Morgoth's own breeding. Glaurung was the first fire-drake; Ancalagon the Black was the greatest of the winged dragons. Werewolves and vampires were evil spirits housed in beast shapes.</p></div>
+<div class="note"><h3><span class="n">11</span>The Silmarils and the exile of the Noldor</h3>
+<p>Fëanor, the greatest craftsman of the Elves, made the three Silmarils and loved them above everything. When Morgoth killed the Trees, killed Fëanor's father Finwë and stole the jewels, Fëanor swore a terrible oath with his seven sons to fight anyone who kept a Silmaril from them.</p>
+<p>Most of the Noldor followed him back to Middle-earth against the will of the Valar. On the way they killed Teleri at Alqualondë to take their ships, and the Doom of the Noldor fell on them. The long wars of the First Age followed. In the end one Silmaril went into the sky with Eärendil, one into the sea and one into the fires of the earth.</p></div>
+<div class="note"><h3><span class="n">12</span>Númenor</h3>
+<p>For their part in the war against Morgoth, the Edain were given an island in the great sea, shaped like a star: Númenor. Elros, Elrond's brother, was its first king. Its people lived roughly three lifetimes of ordinary Men, but were not to sail west beyond sight of their island: the Ban of the Valar.</p>
+<p>Over the centuries the Númenóreans grew mighty, proud and afraid of death. Ar-Pharazôn, the last king, sailed to Middle-earth and brought Sauron back as a prisoner. Sauron soon ruled him from the inside, set up a temple to Morgoth and talked him into attacking Valinor itself. The Valar laid down their rule of the World and called on Eru. In Second Age 3319 the sea swallowed Númenor; the World was made round and Valinor taken out of its circles.</p>
+<p>Elendil and his sons, the Faithful, escaped in nine ships and set up two realms: Arnor to the north, Gondor to the south.</p></div>
+<div class="note"><h3><span class="n">13</span>The Half-elven and the Choice</h3>
+<p>Three times an Elf and one of the Edain married: Lúthien and Beren, Idril and Tuor, and Arwen and Aragorn. Their families carry Elvish, Mannish and, through Melian, even Maia blood.</p>
+<p>Eärendil and Elwing sailed to Valinor carrying a Silmaril, to beg the Valar for help against Morgoth. Help came, and with it a choice for them and their sons: to be counted among the Elves or among Men. Elrond picked the Elves. His twin, Elros, picked Men, and became Númenor's first king. Elrond's children were offered the same choice, and Arwen gave up her Elvish life to marry Aragorn.</p></div>
+<div class="note"><h3><span class="n">14</span>The Rings of Power</h3>
+<p>Sauron came disguised to the Elves of Eregion in a fair disguise, calling himself Annatar, "Lord of Gifts", and taught their smiths, led by Celebrimbor, how to make rings of power. In secret, in about Second Age 1600, he made the One Ring in the fires of Mount Doom, a master ring over all the rest. The Elves felt it and took off their rings.</p>
+<ul>
+<li><b>The Three</b> (Narya, Nenya, Vilya) were made by Celebrimbor alone and never touched by Sauron. They were kept by Círdan (who gave Narya to Gandalf), Galadriel, and Gil-galad (who gave Vilya to Elrond).</li>
+<li><b>The Seven</b> went to Dwarf-kings; some were eaten by dragons, the rest taken back by Sauron.</li>
+<li><b>The Nine</b> went to Men, who became the Nazgûl.</li>
+<li><b>The One</b> was cut from Sauron's hand by Isildur at the end of the Second Age, slipped into the Anduin, dug up by Déagol, taken by Sméagol, found by Bilbo, and unmade in the fire on 25 March, Third Age 3019.</li>
+</ul></div>
+<div class="note"><h3><span class="n">15</span>Hobbits</h3>
+<p>Tolkien counts Hobbits as a kind of Men, unrelated to Elves or Dwarves, though nobody knew when they split off. They appear first along the Anduin valley as three peoples: Harfoots, Stoors and Fallohides.</p>
+<p>In Third Age 1601 the brothers Marcho and Blanco led a group west over the river Baranduin and founded the Shire. Gollum began as Sméagol, one of a river people much like the Stoors.</p></div>
+<div class="note"><h3><span class="n">16</span>Open questions</h3>
+<p>Tolkien never meant to explain everything, and some things on this chart are left open on purpose. Tom Bombadil, "Eldest", master of the Old Forest, fits no box at all. We never learn where Ungoliant came from, or the Watcher in the Water, or the nameless things deep below Moria. The Huorns may be Ents grown tree-like or trees grown awake. Whether the Great Eagles are Maiar or living birds, and exactly where Orcs came from, Tolkien wrote about in more than one way. Gil-galad's father also changes between drafts.</p></div>
+<div class="note"><h3><span class="n">✦</span>One person, many names</h3>
+<table class="t"><tr><th>Best known as</th><th>Also called</th></tr>
+<tr><td>Eru</td><td>Ilúvatar, the One, Father of All</td></tr>
+<tr><td>Manwë</td><td>Súlimo, the Elder King</td></tr>
+<tr><td>Varda</td><td>Elbereth, Elentári, Gilthoniel</td></tr>
+<tr><td>Yavanna</td><td>Kementári, Giver of Fruits</td></tr>
+<tr><td>Mandos</td><td>Námo, Judge of the Dead</td></tr>
+<tr><td>Lórien</td><td>Irmo, Master of Dreams</td></tr>
+<tr><td>Melkor</td><td>Morgoth, Bauglir, the Dark Lord</td></tr>
+<tr><td>Sauron</td><td>Mairon, Annatar, Gorthaur, the Necromancer</td></tr>
+<tr><td>Gandalf</td><td>Olórin, Mithrandir, Tharkûn, Incánus, Grey Pilgrim</td></tr>
+<tr><td>Saruman</td><td>Curumo, Curunír, Sharkey</td></tr>
+<tr><td>Radagast</td><td>Aiwendil, the Brown</td></tr>
+<tr><td>Thingol</td><td>Elwë Singollo, Greymantle</td></tr>
+<tr><td>Elrond</td><td>Peredhel, "Half-elven"</td></tr>
+<tr><td>Aragorn</td><td>Strider, Estel, Thorongil, Elessar</td></tr>
+<tr><td>Arwen</td><td>Undómiel, Evenstar</td></tr>
+<tr><td>Treebeard</td><td>Fangorn</td></tr>
+<tr><td>Gollum</td><td>Sméagol</td></tr>
+<tr><td>Witch-king</td><td>Lord of the Nazgûl, Black Captain</td></tr>
+</table></div>
+</div>
+</section>
+<!-- ============ NOTES III ============ -->
+<section class="page" data-notes="1">
+<div class="kick">Notes III</div>
+<h1>Notes: Ages, Origins and Sources</h1>
+<p class="lede">A quick timeline, a one-glance table of how every kind of being came to be, and where this chart comes from.</p>
+<div class="notes" style="column-fill:balance;height:auto;font-size:8.3pt">
+<div class="note"><h3><span class="n">✦</span>Timeline of the Ages</h3>
+<ul style="margin:0;padding-left:3.5mm">
+<li><b>Before the World:</b> Eru makes the Ainur; the Music; the vision; Eä.</li>
+<li><b>The Years of the Lamps:</b> the Valar shape the World and light it with two Lamps, until Melkor throws them down.</li>
+<li><b>The Years of the Trees:</b> Valinor lit by the Two Trees; the Elves wake under the stars; the Great Journey; the Silmarils made; the Trees killed; the Noldor leave.</li>
+<li><b>First Age</b> (about 590 years): the first sunrise and the waking of Men; the wars of Beleriand against Morgoth; Beren and Lúthien; Gondolin falls; the War of Wrath, and Beleriand sinks.</li>
+<li><b>Second Age</b> (3441 years): Númenor rises; the Rings are made; Númenor drowns (3319); the Last Alliance of Elves and Men beats Sauron (3441).</li>
+<li><b>Third Age</b> (3021 years): the Wizards arrive (about 1000); the Shire is founded (1601); Smaug takes Erebor (2770); Bilbo's adventure (2941); the War of the Ring (3018 to 3019).</li>
+<li><b>Fourth Age:</b> the age of Men; the last Ring-bearers sail into the West.</li>
+</ul></div>
+<div class="note"><h3><span class="n">✦</span>How each kind came to be</h3>
+<table class="t"><tr><th>Who</th><th>Made by</th><th>How</th></tr>
+<tr><td>Valar, Maiar</td><td>Eru</td><td>from his thought, before time</td></tr>
+<tr><td>Elves</td><td>Eru alone</td><td>woke under the stars at Cuiviénen</td></tr>
+<tr><td>Men</td><td>Eru alone</td><td>woke at the first sunrise</td></tr>
+<tr><td>Hobbits</td><td>Eru, as Men</td><td>a small branch of Men</td></tr>
+<tr><td>Dwarves</td><td>Aulë; life from Eru</td><td>made in secret, then adopted</td></tr>
+<tr><td>Ents</td><td>Eru, at Yavanna's asking</td><td>spirits dwelling in tree-like bodies</td></tr>
+<tr><td>Great Eagles</td><td>Eru, at Manwë's word</td><td>spirits or birds; left open</td></tr>
+<tr><td>Half-elven</td><td>Elves and Men</td><td>marriage, then a choice</td></tr>
+<tr><td>Istari</td><td>Maiar</td><td>came in the form of old men</td></tr>
+<tr><td>Sauron, Balrogs</td><td>Maiar</td><td>won over by Melkor</td></tr>
+<tr><td>Orcs</td><td>Melkor</td><td>most tales: bred from captured Elves</td></tr>
+<tr><td>Trolls</td><td>Melkor; later Sauron</td><td>made in mockery of Ents</td></tr>
+<tr><td>Dragons, werewolves</td><td>Melkor</td><td>bred, or spirits in beast shape</td></tr>
+<tr><td>Nazgûl</td><td>Sauron</td><td>Men enslaved by the Nine Rings</td></tr>
+<tr><td>Ungoliant</td><td>unknown</td><td>a dark spirit from outside the tale</td></tr>
+</table></div>
+<div class="note"><h3><span class="n">✦</span>Where to read more</h3>
+<table class="t"><tr><th>Plate</th><th>Best place to start</th></tr>
+<tr><td>I, II</td><td><i>The Silmarillion</i>: "Ainulindalë" and "Valaquenta"</td></tr>
+<tr><td>III</td><td><i>The Silmarillion</i>: "Of the Coming of the Elves", "Of Eldamar", "Of the Sindar"</td></tr>
+<tr><td>IV</td><td><i>The Silmarillion</i>: "Of Men", "Akallabêth"; <i>The Lord of the Rings</i>: Prologue, Appendices A and F</td></tr>
+<tr><td>V</td><td><i>The Silmarillion</i>: "Of Beren and Lúthien", "Of the Voyage of Eärendil"; Appendix A</td></tr>
+<tr><td>VI</td><td><i>The Silmarillion</i>: "Of Aulë and Yavanna"; <i>The Two Towers</i>: "Treebeard"</td></tr>
+<tr><td>VII</td><td><i>The Silmarillion</i>: "Of the Rings of Power and the Third Age"; <i>The Hobbit</i>; Appendix B</td></tr>
+</table></div>
+<div class="note"><h3><span class="n">✦</span>Places on the chart</h3>
+<p><b>Arda:</b> the Earth, the realm the Valar shaped. <b>Eä:</b> the whole created universe. <b>Aman</b> and <b>Valinor:</b> the Blessed Realm in the far West, home of the Valar. <b>Middle-earth:</b> the lands between, where most of the stories happen. <b>Beleriand:</b> the north-west land of the First Age wars, sunk at its end. <b>Cuiviénen:</b> the lake where the Elves woke. <b>Hildórien:</b> the land where Men woke. <b>Númenor:</b> the island kingdom of the Second Age.</p></div>
+<div class="note"><h3><span class="n">✦</span>Where this comes from</h3>
+<p>This is an unofficial fan reference, written fresh in our own words for AiRT Official. It retells facts and names from J.R.R. Tolkien's published books: <i>The Hobbit</i>, <i>The Lord of the Rings</i> and its appendices, <i>The Silmarillion</i>, <i>Unfinished Tales</i> and <i>The History of Middle-earth</i>, edited by Christopher Tolkien. No text, pictures or maps are copied from the books, films or shows.</p>
+<p>Tolkien changed his mind on some details over the years. Where the books disagree, this chart follows <i>The Silmarillion</i> and <i>The Lord of the Rings</i>, and flags the doubt (note 16). If you spot a mistake, tell us in the comments.</p>
+<p>Not affiliated with or endorsed by the Tolkien Estate, HarperCollins, Middle-earth Enterprises or any film or TV studio. Character and place names belong to their owners.</p>
+<p><b>Print tip:</b> A4 landscape, 100% scale (no "fit to page"), colour. Free from github.com/airt-gallery. Chart design and text: CC BY 4.0, AiRT Official.</p></div>
+</div>
+</section>
+<script>
+/* Runs once when the PDF is printed: adds the footer and draws the connecting lines. The PDF itself has no scripts. */
+(function(){
+var MM=96/25.4, NS="http://www.w3.org/2000/svg";
+var pages=document.querySelectorAll(".page"), N=pages.length;
+var KEY='<div class="key"><span><i style="border-color:#b8860b;background:#fff6dc"></i>Ainur: from Eru\'s thought</span><span><i style="border-color:#2b4c7e;background:#eef3fb"></i>Children of Ilúvatar</span><span><i style="border-color:#2f6b4f;background:#eaf5ee"></i>Made or sent by a Vala, given life by Eru</span><span><i style="border-color:#6b4c9a;background:#f2ecfa"></i>Mixed descent</span><span><i style="border-color:#9b2d30;background:#fbeceb"></i>Of the Dark: fallen or bred</span><span><i style="border-color:#7d7466;border-style:dashed;background:#f1eee8"></i>Origin unknown</span></div>';
+pages.forEach(function(pg,i){
+  var f=document.createElement("div");f.className="foot";
+  f.innerHTML=(pg.dataset.notes?'<div>AiRT Official · Tolkien who\'s-who chart · v1.0 · github.com/airt-gallery · An unofficial fan reference, written in our own words</div>':KEY)+'<div class="pg">'+(pg.dataset.notes?'':'Tolkien who\'s-who chart · ')+'Page '+(i+1)+' of '+N+'</div>';
+  pg.appendChild(f);
+  if(!pg.dataset.notes){var g=document.createElement("div");g.style.cssText="position:absolute;right:10mm;top:8.6mm;font-size:6.2pt;color:#5b4d33;text-align:right";g.innerHTML="AiRT Official · Tolkien who's-who chart · v1.0<br>github.com/airt-gallery";pg.appendChild(g);}
+});
+function R(el,pg){var a=el.getBoundingClientRect(),b=pg.getBoundingClientRect();return{l:a.left-b.left,t:a.top-b.top,r:a.right-b.left,b:a.bottom-b.top,w:a.width,h:a.height,cx:(a.left+a.right)/2-b.left,cy:(a.top+a.bottom)/2-b.top};}
+pages.forEach(function(pg){
+  var sc=pg.querySelector('script[type="text/links"]'); if(!sc) return;
+  var svg=document.createElementNS(NS,"svg");svg.setAttribute("class","wires");pg.insertBefore(svg,pg.firstChild);var lsvg=document.createElementNS(NS,"svg");lsvg.setAttribute("class","labels");pg.appendChild(lsvg);
+  var lines=sc.textContent.trim().split("\n").map(function(s){return s.trim().split(/\s+/);}).filter(function(x){return x.length>=3;});
+  // bus height for vertical links: halfway between parent bottom and the highest child top
+  var bus={};
+  lines.forEach(function(L){if(L[2]!=="v"&&L[2]!=="c")return;var ids=L[0].split("+");var pb=Math.max.apply(null,ids.map(function(id){return R(document.getElementById(id),pg).b;}));
+    if(L[2]==="c") pb=R(document.getElementById(ids[0]),pg).cy;
+    var ct=R(document.getElementById(L[1]),pg).t;bus[L[0]]=Math.min(bus[L[0]]===undefined?1e9:bus[L[0]],ct);bus[L[0]+"_pb"]=pb;});
+  function path(d,col,dash,w){var p=document.createElementNS(NS,"path");p.setAttribute("d",d);p.setAttribute("fill","none");p.setAttribute("stroke",col);p.setAttribute("stroke-width",w||0.95);if(dash)p.setAttribute("stroke-dasharray","3.2 2.2");svg.appendChild(p);}
+  function label(x,y,txt,col,anc){if(!txt)return;var t=document.createElementNS(NS,"text");t.setAttribute("x",x);t.setAttribute("y",y);t.setAttribute("class","lbl");t.setAttribute("text-anchor",anc||"middle");if(col)t.setAttribute("style","fill:"+col);t.textContent=txt;lsvg.appendChild(t);}
+  lines.forEach(function(L){
+    var kind=L[2],col=L[3],rest=L.slice(4),dash=false;
+    if(rest[rest.length-1]==="dash"){dash=true;rest.pop();}
+    var txt=rest.join(" ");
+    var B=document.getElementById(L[1]); if(!B){console.error("missing "+L[1]);return;}
+    var b=R(B,pg);
+    if(kind==="c"){ // couple a+b -> child
+      var ids=L[0].split("+"),p1=R(document.getElementById(ids[0]),pg),p2=R(document.getElementById(ids[1]),pg);
+      var x0=(Math.min(p1.r,p2.r)+Math.max(p1.l,p2.l))/2, y0=p1.cy, by=(Math.max(p1.b,p2.b)+bus[L[0]])/2;
+      path("M"+x0+","+y0+"V"+by+"H"+b.cx+"V"+b.t,col,dash);return;}
+    var A=document.getElementById(L[0]); if(!A){console.error("missing "+L[0]);return;}
+    var a=R(A,pg);
+    if(kind==="v"){var y=(bus[L[0]+"_pb"]+bus[L[0]])/2;path("M"+a.cx+","+a.b+"V"+y+"H"+b.cx+"V"+b.t,col,dash);label(b.cx+1.4*MM,(y+b.t)/2+2,txt,col,"start");}
+    else if(kind==="vd"){path("M"+a.cx+","+a.b+"V"+(b.t-6*MM)+"H"+b.cx+"V"+b.t,col,dash);label(b.cx+(a.cx<b.cx?-22:22),b.t-6*MM-2,txt,col);}
+    else if(kind==="h"){var right=b.l>a.r, x1=right?a.r:a.l, x2=right?b.l:b.r, ya=Math.min(a.cy,a.t+7*MM), yb=Math.min(b.cy,b.t+7*MM), mx=(x1+x2)/2;
+      path("M"+x1+","+ya+"H"+mx+"V"+yb+"H"+x2,col,dash);label(mx,Math.min(ya,yb)-1.8,txt,col);}
+    else if(kind==="k"){var xk=b.l-1.3*MM, yk=b.t+3.2*MM;path("M"+xk+","+a.b+"V"+yk+"H"+b.l,col,dash);}
+    else if(kind==="t"){var x=a.l+3*MM, y2=b.t+3.2*MM;path("M"+x+","+a.b+"V"+y2+"H"+b.l,col,dash);}
+    else if(kind==="m"){var right2=b.l>a.r, xa=right2?a.r:a.l, xb=right2?b.l:b.r, yy=(Math.max(a.t,b.t)+Math.min(a.b,b.b))/2; if(Math.abs(a.cy-b.cy)>a.h) yy=a.cy;
+      path("M"+xa+","+(yy-1.3)+"H"+xb,"#b8860b",false,0.8);path("M"+xa+","+(yy+1.3)+"H"+xb,"#b8860b",false,0.8);label((xa+xb)/2,yy-3,txt,"#8a6a2a");}
+    else if(kind==="u"){ // around the side notes: right, up a gutter, across, up into the bottom of b
+      var gx=a.r+(parseFloat(rest[0])||12)*MM, gy=b.b+3*MM; rest=rest.slice(1); path("M"+a.r+","+a.cy+"H"+gx+"V"+gy+"H"+b.cx+"V"+b.b,col,dash);label(gx+1.2*MM,a.cy-2,rest.join(" "),col,"start");}
+    else if(kind==="mv"){ // marriage, vertical (a above b)
+      var xx=Math.max(a.l,b.l)+4*MM; path("M"+(xx-1.3)+","+a.b+"V"+b.t,"#b8860b",false,0.8);path("M"+(xx+1.3)+","+a.b+"V"+b.t,"#b8860b",false,0.8);}
+  });
+});
+// layout check for the build script: anything poking outside its page or into the footer
+var bad=[];
+pages.forEach(function(pg,i){var fb=R(pg.querySelector(".foot"),pg).t, W=pg.clientWidth;
+  pg.querySelectorAll(".b,.who,.note,.banner,.panel,table,h1,.lede").forEach(function(el){var r=R(el,pg);if(r.b>fb-0.5||r.r>W-10*MM+1||r.l<10*MM-1)bad.push("page "+(i+1)+": "+(el.id||el.className)+" "+Math.round(r.l)+","+Math.round(r.t)+"-"+Math.round(r.r)+","+Math.round(r.b)+" (foot "+Math.round(fb)+")");});
+  pg.querySelectorAll(".b,.who,.note").forEach(function(el){if(el.scrollHeight>el.clientHeight+1||el.scrollWidth>el.clientWidth+1)bad.push("page "+(i+1)+": clipped "+(el.id||el.className));});
+  var nt=pg.querySelector(".notes");if(nt&&nt.scrollWidth>nt.clientWidth+2)bad.push("page "+(i+1)+": notes overflow into a 4th column");
+});
+window.LAYOUT_PROBLEMS=bad;
+})();
+</script>
+</body></html>
